@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Picture;
+use App\Entity\Tag;
 use App\Form\PictureType;
+use App\Form\TagType;
 use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,13 +33,32 @@ class PictureController extends AbstractController
     }
 
     #[Route('/pictures/{id}', name: 'picture_details', requirements: ['id' => '\d+'])]
-    public function pictureDetails(int $id): Response
+    public function pictureDetails(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $picture = $this->pictureRepository->find($id);
+
+        $tag = new Tag();
+        $tag->setPicture($picture);
+        $tagForm = $this->createForm(TagType::class, $tag);
+        $tagForm->handleRequest($request);
+
+        if ($tagForm->isSubmitted() && $tagForm->isValid()) {
+            $tag = $tagForm->getData();
+            $tag->setCreatedAt(new \DateTimeImmutable());
+            $tag->setPicture($picture);
+
+            $entityManager->persist($tag);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('picture_details', ['id' => $picture->getId()]);
+        }
+
+
         return $this->render(
             'picture/picture-details.html.twig',
             [
                 'picture' => $picture,
+                'tagForm' => $tagForm,
             ]
         );
     }
