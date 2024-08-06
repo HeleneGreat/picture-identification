@@ -18,7 +18,7 @@
         </div>
         <div class="col-4">
             <ul>
-                {% for tag in picture.tags %}
+                {% for tag in picture.tags|sort((a, b) => a.person.lastname <=> b.person.lastname) %}
                 <li>{{ tag.person.fullname }} 
                     <a class="btn btn-danger text-white" href="{{ path('tag_delete', {id: tag.id}) }}">
                         <img src="{{ asset('bin.svg') }}" alt="Supprimer">
