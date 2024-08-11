@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Vich\UploaderBundle\Handler\DownloadHandler;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class PictureController extends AbstractController
 {
@@ -24,18 +26,20 @@ class PictureController extends AbstractController
     }
 
     #[Route('/pictures', name: 'picture_list')]
-    public function pictureListPage(): Response
+    public function pictureListPage(UploaderHelper $uploaderHelper): Response
     {
         $pictures = $this->pictureRepository->findAll();
+        // $imagePath = $uploaderHelper->asset($picture, 'imageFile');
         return $this->render('picture/picture-list.html.twig', [
             'pictures' => $pictures,
         ]);
     }
 
     #[Route('/pictures/{id}', name: 'picture_details', requirements: ['id' => '\d+'])]
-    public function pictureDetails(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function pictureDetails(int $id, Request $request, EntityManagerInterface $entityManager, UploaderHelper $uploaderHelper): Response
     {
         $picture = $this->pictureRepository->find($id);
+        $imagePath = $uploaderHelper->asset($picture, 'imageFile');
 
         $tag = new Tag();
         $tag->setPicture($picture);
@@ -58,6 +62,7 @@ class PictureController extends AbstractController
             'picture/picture-details.html.twig',
             [
                 'picture' => $picture,
+                'imagePath' => $imagePath,
                 'tagForm' => $tagForm,
             ]
         );
@@ -119,5 +124,12 @@ class PictureController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('picture_list');
+    }
+
+    #[Route('/uploads/pictures/{id}/view', name: 'picture_view')]
+    public function viewPicture(Picture $picture, DownloadHandler $downloadHandler): Response
+    {
+        // Affiche le fichier inline dans le navigateur
+        return $downloadHandler->downloadObject($picture, 'imageFile', null, null, false);
     }
 }

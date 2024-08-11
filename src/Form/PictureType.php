@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Picture;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -15,7 +15,7 @@ class PictureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('filename', TextType::class, [
+            ->add('imageFile', VichFileType::class, [
                 'required' => true,
                 'label' => 'Nom du fichier'
             ])

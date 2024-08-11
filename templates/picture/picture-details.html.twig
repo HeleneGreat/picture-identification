@@ -5,7 +5,7 @@
 <section class="container my-3">
     <div class="row">
         <div class="card col-8">
-            <img src="..." class="card-img-top" alt="{{ picture.filename }}">
+            <img src="{{ path('picture_view', {id: picture.id}) }}" class="card-img-top" alt="{{ picture.filename }}">
             <div class="card-body">
                 <p class="card-text">{{ picture.description }}</p>
                 <a class="btn btn-warning" href="{{ path('picture_update', {id: picture.id}) }}">
@@ -20,7 +20,7 @@
             <ul>
                 {% for tag in picture.tags|sort((a, b) => a.person.lastname <=> b.person.lastname) %}
                 <li>{{ tag.person.fullname }} 
-                    <a class="btn btn-danger text-white" href="{{ path('tag_delete', {id: tag.id}) }}">
+                    <a class="btn btn-danger" href="{{ path('tag_delete', {id: tag.id}) }}">
                         <img src="{{ asset('bin.svg') }}" alt="Supprimer">
                     </a>
                 </li>
