@@ -125,11 +125,4 @@ class PictureController extends AbstractController
 
         return $this->redirectToRoute('picture_list');
     }
-
-    #[Route('/uploads/pictures/{id}/view', name: 'picture_view')]
-    public function viewPicture(Picture $picture, DownloadHandler $downloadHandler): Response
-    {
-        // Affiche le fichier inline dans le navigateur
-        return $downloadHandler->downloadObject($picture, 'imageFile', null, null, false);
-    }
 }

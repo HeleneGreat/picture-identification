@@ -12,7 +12,7 @@
         {% for picture in pictures %}
             <div class="card">
                 <a href="{{ path('picture_details', {id: picture.id}) }}">
-                    <img src="{{ path('picture_view', {id: picture.id}) }}" class="card-img-top" alt="{{ picture.filename }}" width="250" height="250">
+                    <img src="{{ path('serve_private_picture', {'id': picture.id}) }}" class="card-img-top" alt="{{ picture.filename }}" width="250" height="250">
                 </a>
             </div>
         {% endfor %}

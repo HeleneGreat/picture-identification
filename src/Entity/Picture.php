@@ -114,6 +114,11 @@ class Picture
         return $this->filename;
     }
 
+    public function getPath(): ?string
+    {
+        return 'uploads/pictures/' . $this->getFilename();
+    }
+
     public function setSize(?int $size): void
     {
         $this->size = $size;

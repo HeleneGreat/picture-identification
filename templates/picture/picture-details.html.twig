@@ -5,7 +5,7 @@
 <section class="container my-3">
     <div class="row">
         <div class="card col-8">
-            <img src="{{ path('picture_view', {id: picture.id}) }}" class="card-img-top" alt="{{ picture.filename }}">
+            <img src="{{ path('serve_private_picture', {'id': picture.id}) }}" class="card-img-top" alt="{{ picture.filename }}">
             <div class="card-body">
                 <p class="card-text">{{ picture.description }}</p>
                 <a class="btn btn-warning" href="{{ path('picture_update', {id: picture.id}) }}">
